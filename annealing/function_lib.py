@@ -90,25 +90,27 @@ def get_process_date(data_set: DataFrame) -> str:
         return "1"
 
 
-def save_process(process_data: DataFrame, output: str, start_time: str, previous_date: str,
+def save_process(process_data: DataFrame, output: str, start_time: str, previous_date: str, offset: float,
                  p: Path, i: int) -> list:
     """
     Checks process data if exists, checks is --output set and if it can be written, saves
-    process in format global_dir/local_dir/file, where lacal_dir contains process date
+    process in format global_dir/local_dir/file, where local_dir contains process date
     :param process_data:
     :param output:
     :param start_time:
     :param previous_date:
+    :param offset:
     :param p:
     :param i:
     :return: last written path with date of previous process or 1 if interrupted by yes_no_question()
     """
 
     current_date = get_process_date(process_data)
-    if not current_date == "1":
+
+    if not current_date == "1":  # if process has no date
         local_dir_name = 'processes_' + current_date + '_data'
-    else:  # if process has no date
-        local_dir_name = 'offsetted_processes_' + str(i) + '_data'
+    else:
+        local_dir_name = 'offset_processes_data'
 
     if output:  # deciding final output path considering --output and local folder with date of the process
         if check_output(output):
@@ -134,6 +136,8 @@ def save_process(process_data: DataFrame, output: str, start_time: str, previous
                 return ["1"]  # this return will be provided to parse_processes() and function will be interrupted
     else:
         print("\nSuccessfully created the directory %s " % local_dir_name)
+
+    datetime_shift(process_data, offset)
 
     process_data.to_csv(output_dir + '\\process_' + str(i) + '_started_at_' +
                         str(start_time[11:][:-4]).replace(":", ".") + '.csv', index=False, sep=';')

@@ -13,7 +13,7 @@ __version__ = 1.1
 options.mode.chained_assignment = None  # default='warn'
 
 
-def main() -> None:
+def main(self) -> None:
     parser = argparse.ArgumentParser(usage="%(prog)s [options]", description='This is a tool to process data from\
      annealing machine STE RTA100')
     parser.add_argument(
