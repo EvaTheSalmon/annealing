@@ -8,7 +8,7 @@ This script runs through the presented data and separates annealing processes in
 
 ## Usage
 
-To run the script specific flag should be used such as annealing your/path/to.file [flag]. You may provide more than one file.
+To run the script specific flag should be used such as `annealing your/path/to.file [flag]`. You may provide more than one file.
 
 `-p, --parse` or no flags (parsing will run by default)
 
