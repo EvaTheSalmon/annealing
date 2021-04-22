@@ -123,13 +123,16 @@ def save_process(process_data: DataFrame, output: str, start_time: str, previous
         output_dir = str(p.parent) + "\\" + str(local_dir_name)
         path_to_return = str(p.parent)
 
+    if previous_date != current_date:
+        i = 1
+
     try:  # checking if final output exist or may be created
         Path(output_dir).mkdir()
     except FileExistsError:
         if previous_date == current_date:
             pass
         else:
-            if i != 1: sys.stdout.write("\n")
+            sys.stdout.write("\n")
             previous_date = current_date
             if not yes_no_question(
                     'Folder with processes "' + output_dir + '" already exist, data will be overwritten'):
@@ -142,7 +145,7 @@ def save_process(process_data: DataFrame, output: str, start_time: str, previous
 
     process_data.to_csv(output_dir + '\\process_' + str(i) + '_started_at_' +
                         str(start_time[11:][:-4]).replace(":", ".") + '.csv', index=False, sep=';')
-    return [path_to_return, previous_date]
+    return [path_to_return, previous_date, i]
 
 
 def yes_no_question(question: str) -> bool:

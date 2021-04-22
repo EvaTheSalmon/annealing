@@ -68,11 +68,12 @@ def main(self) -> None:
     function_lib.yes = args.yes
 
     parse = args.parse
-    output_path = args.output
+    # output_path = args.output
+    output_path = ""
     # concat = args.concat
     concat = False
     # shift = args.shift
-    shift = False
+    shift = None
 
     # default action with no flags provided
     if parse is False and concat is False and shift is None:

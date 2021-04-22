@@ -8,7 +8,7 @@ def parse_processes(input_path: str, output_path: str) -> None:
     data = load_file(input_path)
     p = Path(input_path)
     i = 1  # ordinal number of process
-
+    t = 0
     previous_date = ""
     current_date = ""
     last_written_path = ""
@@ -36,21 +36,22 @@ def parse_processes(input_path: str, output_path: str) -> None:
             process = data.iloc[first_non_zero:last_eq_zero]
             if i == 1:
                 process = process.reset_index(drop=True)
-            [last_written_path, previous_date] = save_process(process, output_path, process_start_time, current_date,
+            [last_written_path, previous_date, i] = save_process(process, output_path, process_start_time, current_date,
                                                               offset, p, i)
 
             if last_written_path == "1":
                 break
         else:
             process = data.iloc[first_non_zero:]
-            [last_written_path, previous_date] = save_process(process, output_path, process_start_time, current_date,
+            [last_written_path, previous_date, i] = save_process(process, output_path, process_start_time, current_date,
                                                               offset, p, i)
             break
         i += 1
+
         data = data.iloc[last_eq_zero:]
         data = data.reset_index(drop=True)
 
         sys.stdout.write("\rDone %i processes so far" % i)
         sys.stdout.flush()
 
-    sys.stdout.write('\n' + str(i) + ' files writen to "' + last_written_path + '"')
+    sys.stdout.write('\n' + 'Files writen to "' + last_written_path + '"')
