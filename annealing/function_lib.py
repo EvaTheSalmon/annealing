@@ -6,7 +6,7 @@ from pandas import DataFrame, read_csv
 global yes
 
 
-def load_file(input_path: str) -> list:
+def load_file(input_path: str) -> DataFrame:
     """
     Function that loads and cleans file
     :param input_path:
@@ -19,7 +19,7 @@ def load_file(input_path: str) -> list:
         except AttributeError:
             pass  # nothing to replace
         data = data.fillna(0)
-    return [data, Path(input_path)]
+    return data
 
 
 def calculate_offset(offset) -> float:
@@ -129,6 +129,7 @@ def save_process(process_data: DataFrame, output: str, start_time: str, previous
         if previous_date == current_date:
             pass
         else:
+            if i != 1: sys.stdout.write("\n")
             previous_date = current_date
             if not yes_no_question(
                     'Folder with processes "' + output_dir + '" already exist, data will be overwritten'):

@@ -1,10 +1,12 @@
 import sys
 
 from function_lib import save_process, load_file, calculate_offset
+from pathlib import Path
 
 
 def parse_processes(input_path: str, output_path: str) -> None:
-    [data, p] = load_file(input_path)
+    data = load_file(input_path)
+    p = Path(input_path)
     i = 1  # ordinal number of process
 
     previous_date = ""

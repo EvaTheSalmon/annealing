@@ -28,17 +28,17 @@ def main(self) -> None:
              with time offsetting to zero (used by default if no flags specified)"
     )
 
-    parser.add_argument(
-        "--output", "-o",
-        action="store",
-        help="custom output path to save results. if not provided input file dir is used by default"
-    )
+    # parser.add_argument(
+    #     "--output", "-o",
+    #     action="store",
+    #     help="custom output path to save results. if not provided input file dir is used by default"
+    # )
 
-    parser.add_argument(
-        "--concat", "-c",
-        action="store_true",
-        help="concat processes in one file with time sensitivity"
-    )
+    # parser.add_argument(
+    #     "--concat", "-c",
+    #     action="store_true",
+    #     help="concat processes in one file with time sensitivity"
+    # )
 
     parser.add_argument(
         "--yes", "-y",
@@ -52,13 +52,13 @@ def main(self) -> None:
         version='%(prog)s ' + str(__version__)
     )
 
-    parser.add_argument(
-        "--shift", "-s",
-        action="store",
-        type=float,
-        nargs=1,
-        help="offset time of processes on certain amount in seconds"
-    )
+    # parser.add_argument(
+    #     "--shift", "-s",
+    #     action="store",
+    #     type=float,
+    #     nargs=1,
+    #     help="offset time of processes on certain amount in seconds"
+    # )
 
     args = parser.parse_args()
 
@@ -69,8 +69,10 @@ def main(self) -> None:
 
     parse = args.parse
     output_path = args.output
-    concat = args.concat
-    shift = args.shift
+    # concat = args.concat
+    concat = False
+    # shift = args.shift
+    shift = False
 
     # default action with no flags provided
     if parse is False and concat is False and shift is None:
