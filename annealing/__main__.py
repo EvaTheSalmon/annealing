@@ -27,34 +27,34 @@ class Process:
             heating_flag = 0
             cooling_flag = 0
 
-            for row in process:
+            with open('names.csv', 'w', newline='\r\n', encoding='utf-8-sig') as csvfile:
+                writer = csv.writer(csvfile)
 
-                powr = row[powr_id].split(",", 1)[0]
-                temp = row[temp_id].split(",", 1)[0]
-                date = row[date_id].split(" ", 1)[1]
+                for row in process:
 
-                if powr != 0 and heating_flag == 0:
-                    heating_flag = 1
-                    cooling_flag = 0
+                    powr = row[powr_id].split(",", 1)[0]
+                    temp = row[temp_id].split(",", 1)[0]
+                    date = row[date_id].split(" ", 1)[1]
 
-                    heating_process += [date, temp, date]
+                    if powr != 0 and heating_flag == 0:
+                        heating_flag = 1
+                        cooling_flag = 0
 
-                    if heating_process:
-                        with open('names.csv', 'w', newline='\r\n', encoding='utf-8-sig') as csvfile:
-                            writer = csv.writer(csvfile)
-                            # todo better to write line on every read without even heating process stored
+                        if heating_process:
+                            writer.writerow(date, temp, date)
 
-                if heating_flag == 1:
-                    heating_process += [date, temp, date]
+                    if heating_flag == 1:
+                        heating_process += [date, temp, date]
 
-                if heating_flag == 1 and powr == 0:
-                    cooling_flag = 1
-                    heating_flag = 0
+                    if heating_flag == 1 and powr == 0:
+                        cooling_flag = 1
+                        heating_flag = 0
 
-                    heating_process += [date, temp, date]
+                        heating_process += [date, temp, date]
 
-                if cooling_flag == 1:
-                    heating_process += [date, temp, date]
+                    if cooling_flag == 1:
+                        heating_process += [date, temp, date]
+
 
 
 def main(self) -> None:
