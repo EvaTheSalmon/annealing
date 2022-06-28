@@ -1,4 +1,6 @@
 import argparse
+from ast import Pow
+from concurrent.futures import process
 import sys
 from io import open
 import csv
@@ -13,49 +15,46 @@ class Process:
 
     @staticmethod
     def _parse(path: str):
+
         with open(path, "r", encoding="utf-8-sig") as processfile:
-            process = csv.reader(processfile, delimiter=";")
+            series = csv.reader(processfile, delimiter=";")
+            header = next(series)
 
-            headers = next(process)
-            date_id = headers.index('Дата Время')
-            temp_id = headers.index('Температура')
-            powr_id = headers.index('Мощность')
+            date_id = header.index('Дата Время')
+            temp_id = header.index('Температура')
+            powr_id = header.index('Мощность')
 
-            heating_process = []
-            heating_process += ['Time', 'Temp', 'Power']
+            heating_and_cooling = []
+            heating_and_cooling.append(['Дата Время', 'Температура', 'Мощность'])
 
-            heating_flag = 0
-            cooling_flag = 0
+            powr_prev = -1
+            i = 1
 
-            with open('names.csv', 'w', newline='\r\n', encoding='utf-8-sig') as csvfile:
-                writer = csv.writer(csvfile)
+            for row in series:
 
-                for row in process:
+                try:
+                    powr = int(row[powr_id].split(",", 1)[0])
+                except ValueError:
+                    powr = 0
+                
+                temp = row[temp_id].split(",", 1)[0]
+                date = row[date_id].split(" ", 1)[1]
+                
+                heating_and_cooling.append([date, temp, powr])
 
-                    powr = row[powr_id].split(",", 1)[0]
-                    temp = row[temp_id].split(",", 1)[0]
-                    date = row[date_id].split(" ", 1)[1]
+                if powr != 0 and powr_prev == 0:
 
-                    if powr != 0 and heating_flag == 0:
-                        heating_flag = 1
-                        cooling_flag = 0
+                    with open("heating_and_cooling_" + str(i) + ".csv", "w", encoding="utf-8-sig") as heating_and_cooling_file:
+                        writer = csv.writer(heating_and_cooling_file, delimiter=";")
+                        writer.writerows(heating_and_cooling)                  
 
-                        if heating_process:
-                            writer.writerow(date, temp, date)
-
-                    if heating_flag == 1:
-                        heating_process += [date, temp, date]
-
-                    if heating_flag == 1 and powr == 0:
-                        cooling_flag = 1
-                        heating_flag = 0
-
-                        heating_process += [date, temp, date]
-
-                    if cooling_flag == 1:
-                        heating_process += [date, temp, date]
-
-
+                    heating_and_cooling.clear()
+                    heating_and_cooling.append(['Дата Время', 'Температура', 'Мощность'])
+                    i+=1
+                
+                powr_prev = powr
+                    
+    
 
 def main(self) -> None:
     parser = argparse.ArgumentParser(usage="%(prog)s [options]", description='This is a tool to process data from\
