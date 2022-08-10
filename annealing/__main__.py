@@ -1,6 +1,4 @@
 import argparse
-from ast import Pow
-from concurrent.futures import process
 import sys
 from io import open
 import csv
@@ -41,10 +39,10 @@ class Process:
                 date = row[date_id].split(" ", 1)[1]
                 
                 heating_and_cooling.append([date, temp, powr])
-
+                
                 if powr != 0 and powr_prev == 0:
 
-                    with open("heating_and_cooling_" + str(i) + ".csv", "w", encoding="utf-8-sig") as heating_and_cooling_file:
+                    with open("proc_of_" + str(path.split("\\")[-1]).split(".csv")[0] + "_at_" + str(date[:8]).replace(":","_") + ".csv", "w", encoding="utf-8-sig", newline='') as heating_and_cooling_file:
                         writer = csv.writer(heating_and_cooling_file, delimiter=";")
                         writer.writerows(heating_and_cooling)                  
 
