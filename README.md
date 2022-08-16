@@ -12,7 +12,7 @@ This script runs through the presented data and cuts annealing processes into se
 
 To run the script specific flag should be used such as `annealing your/path/to.file [flag]`. You may provide more than one file.
 
-`-p, --parse` or no flags (parsing will run by default)
+No flag (parsing will run by default)
 
 The script will split the entire sequence into separate CSV files for each process, and recalculate for each of the processing time from zero. The result will be in the same directory as the original file. The processes will be numbered and marked with a start time.
 
