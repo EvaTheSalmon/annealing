@@ -15,44 +15,48 @@ class Process:
     @staticmethod
     def _parse(path: str, output_path: str):
 
-        with open(path, "r", encoding="utf-8-sig") as processfile:
-            series = csv.reader(processfile, delimiter=";")
-            header = next(series)
+        try:
+            with open(path, "r", encoding="utf-8-sig") as processfile:
+                series = csv.reader(processfile, delimiter=";")
+                header = next(series)
 
-            date_id = header.index('Дата Время')
-            temp_id = header.index('Температура')
-            powr_id = header.index('Мощность')
+                date_id = header.index('Дата Время')
+                temp_id = header.index('Температура')
+                powr_id = header.index('Мощность')
 
-            heating_and_cooling = []
-            heating_and_cooling.append(['Дата Время', 'Температура', 'Мощность'])
+                heating_and_cooling = []
+                heating_and_cooling.append(['Дата Время', 'Температура', 'Мощность'])
 
-            powr_prev = -1
-            i = 1
+                powr_prev = -1
+                i = 1
 
-            for row in series:
+                for row in series:
 
-                try:
-                    powr = int(row[powr_id].split(",", 1)[0])
-                except ValueError:
-                    powr = 0
-                
-                temp = row[temp_id].split(",", 1)[0]
-                date = row[date_id].split(" ", 1)[1]
-                
-                heating_and_cooling.append([date, temp, powr])
-                
-                if powr != 0 and powr_prev == 0:
-
-                    with open(output_path + "/" + "proc_of_" + str(path.split("\\")[-1]).split(".csv")[0] + "_at_" + str(date[:8]).replace(":","_") + ".csv", "w", encoding="utf-8-sig", newline='') as heating_and_cooling_file:
-                        writer = csv.writer(heating_and_cooling_file, delimiter=";")
-                        writer.writerows(heating_and_cooling)
-
-                    heating_and_cooling.clear()
-                    heating_and_cooling.append(['Дата Время', 'Температура', 'Мощность'])
-                    i+=1
-                
-                powr_prev = powr
+                    try:
+                        powr = int(row[powr_id].split(",", 1)[0])
+                    except ValueError:
+                        powr = 0
                     
+                    temp = row[temp_id].split(",", 1)[0]
+                    date = row[date_id].split(" ", 1)[1]
+                    
+                    heating_and_cooling.append([date, temp, powr])
+                    
+                    if powr != 0 and powr_prev == 0:
+
+                        with open(output_path + "/" + "proc_of_" + str(path.split("\\")[-1]).split(".csv")[0] + "_at_" + str(date[:8]).replace(":","_") + ".csv", "w", encoding="utf-8-sig", newline='') as heating_and_cooling_file:
+                            writer = csv.writer(heating_and_cooling_file, delimiter=";")
+                            writer.writerows(heating_and_cooling)
+
+                        heating_and_cooling.clear()
+                        heating_and_cooling.append(['Дата Время', 'Температура', 'Мощность'])
+                        i+=1
+                    
+                    powr_prev = powr
+
+        except IOError:
+            print('Error reading file')
+        
     
 
 def main(self) -> None:
